@@ -1,4 +1,4 @@
-package a01a.e2;
+package a03b.e2;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,7 +16,6 @@ public class GUIExample extends JFrame {
         ActionListener al = (e)->{
             final JButton bt = (JButton)e.getSource();
             bt.setText("X");
-            System.exit(1);
         };
         for (int i=0;i<3*3;i++){
             final JButton jb = new JButton("a");
