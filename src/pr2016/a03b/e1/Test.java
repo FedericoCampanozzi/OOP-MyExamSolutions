@@ -1,123 +1,148 @@
-//Finito in 75 min
+//Finito in 30 minuti no opzionali
+//
 package pr2016.a03b.e1;
 
 import static org.junit.Assert.*;
+
 import java.util.*;
 
+/**
+ * Si consulti la documentazione delle interfacce Time e Clock fornite.
+ * Time, che va implementata con una classe TimeImpl con costruttore a tre argomenti di tipo int (ore, minuti, secondi),
+ * modella il concetto di orario (ad esempio: 20:30:00 per indicare le 8 e mezza di sera).
+ * Clock, che va implementata con una classe ClockImpl con costruttore che prende in ingresso un Time, modella
+ * un orologio con "sveglia", con metodi per avanzare di un secondo l'orario, e per registrare un osservatore
+ * che verrà notificato ad una certa ora (pattern Observer).
+ * 
+ * Sono considerati opzionali ai fini della possibilità di correggere l'esercizio, ma concorrono comunque al raggiungimento 
+ * della totalità del punteggio:
+ * - implementazione dei test opzionali (relativi alla gestione delle notifiche, ossia il pattern Observer) 
+ * - la buona progettazione della soluzione, in particolare con minimizzazione di ripetizioni e uso di numeri magici
+ * 
+ * Si osservi con attenzione il test seguente, che assieme ai commenti delle interfacce date
+ * costituisce la definizione del problema da risolvere.
+ * 
+ * Si tolga il commento al codice del test.
+ */
+
 public class Test {
-	
-	/*
-	 * Implementare l'interfaccia ExamsManagement fornita tramite una classe ExamsManagementImpl con costruttore senza argomenti.
-	 * Realizza un concetto di gestore dei voti di questo corso OOP.
-	 * Fornisce funzionalità per:
-	 * - creare studenti 
-	 * - registrare i voti degli studenti ai vari appelli in lab (appelli numerati con id incrementale);
-	 * - registrare il voto del progetto (definito da un nome)
-	 * - calcolare il voto finale come media pesata (60% al migliore - 40% al peggiore), fra il voto in lab (l'ultimo
-	 * conseguito) e quello al progetto
-	 * - per ottenere informazioni storiche
-	 * 
-	 * Si noti che i test con annotazione @org.junit.Test(expected = ...) passano solo se viene lanciata l'eccezione indicata nei ...
-	 * Si noti che i test con annotazione @org.junit.Test passano se non viene lanciata alcuna eccezione
-	 * Si noti che i metodi con annotazione @org.junit.Before vengono eseguiti sempre prima di aver eseguito ogni test, e servono
-	 * a preparare una configurazione "nuova" (sempre la stessa) prima di eseguire un test.
-	 * 
-	 * Sono considerati opzionali ai fini della possibilità di correggere l'esercizio, ma concorrono comunque al raggiungimento 
-	 * della totalità del punteggio:
-	 * - implementazione dei test chiamati optionalTestXYZ (relativi al metodo projectEvaluation e alla gestione delle eccezioni) 
-	 * - la buona progettazione della soluzione, in particolare con minimizzazione di ripetizioni
-	 * 
-	 */
-	
-	private ExamsManagement data;
-	
-	@org.junit.Before
-	public void createData() {
-		this.data = new ExamsManagementImpl();
-		data.createStudent(10, "Mario");
-		data.createStudent(20, "Lucia");
-		data.createStudent(30, "Carlo");
-		data.createStudent(40, "Anna");
-		data.createStudent(50, "Ugo");
-		data.createStudent(60, "Silvia");
-		data.registerLabEvaluation(10, 30, 1);
-		data.registerLabEvaluation(20, 18, 1);
-		data.registerLabEvaluation(30, 25, 1);
-		data.registerLabEvaluation(40, 16, 1);
-		
-		data.registerProjectEvaluation(20, 30, "Pacman");
-		data.registerProjectEvaluation(40, 29, "Pacman");
-		
-		data.registerLabEvaluation(20, 24, 2);
-		data.registerLabEvaluation(40, 15, 2);
-				
-		data.registerLabEvaluation(50, 21, 3);
-		data.registerLabEvaluation(60, 21, 3);
-		
-		data.registerProjectEvaluation(10, 28, "MarioBros");
-		data.registerProjectEvaluation(30, 28, "MarioBros");
-		
-	}
-	
-	@org.junit.Test
-	public void testFinalEvaluation() {
-		assertEquals(data.finalEvaluation(10),Optional.of(29));
-		assertEquals(data.finalEvaluation(20),Optional.of(28));
-		assertEquals(data.finalEvaluation(30),Optional.of(27));
-		assertEquals(data.finalEvaluation(40),Optional.of(23));
-		assertEquals(data.finalEvaluation(50),Optional.empty());
-		assertEquals(data.finalEvaluation(60),Optional.empty());
-	}
-	
-	
-	@org.junit.Test
-	public void testLabExamStudentToEvaluation() {
-		assertEquals(data.labExamStudentToEvaluation(1).size(),4);
-		assertEquals(data.labExamStudentToEvaluation(1).get("Mario").intValue(),30);
-		assertEquals(data.labExamStudentToEvaluation(1).get("Lucia").intValue(),18);
-		assertEquals(data.labExamStudentToEvaluation(1).get("Carlo").intValue(),25);
-		assertEquals(data.labExamStudentToEvaluation(1).get("Anna").intValue(),16);
-		assertEquals(data.labExamStudentToEvaluation(2).size(),2);
-		assertEquals(data.labExamStudentToEvaluation(2).get("Lucia").intValue(),24);
-		assertEquals(data.labExamStudentToEvaluation(2).get("Anna").intValue(),15);
-	}
-	
-	@org.junit.Test
-	public void testAllLabExamStudentToFinalEvaluation() {
-		assertEquals(data.allLabExamStudentToFinalEvaluation().size(),4);
-		assertEquals(data.allLabExamStudentToFinalEvaluation().get("Mario").intValue(),29);
-		assertEquals(data.allLabExamStudentToFinalEvaluation().get("Lucia").intValue(),28);
-		assertEquals(data.allLabExamStudentToFinalEvaluation().get("Carlo").intValue(),27);
-		assertEquals(data.allLabExamStudentToFinalEvaluation().get("Anna").intValue(),23);	
-	}
-	
-	@org.junit.Test
-	public void optionalTestProjectEvaluation() {
-		assertEquals(data.projectEvaluation("MarioBros").get("Mario").intValue(),28);
-		assertEquals(data.projectEvaluation("MarioBros").get("Carlo").intValue(),28);
-		assertEquals(data.projectEvaluation("Pacman").get("Lucia").intValue(),30);
-		assertEquals(data.projectEvaluation("Pacman").get("Anna").intValue(),29);
-		
-	}
-	
-	
-	@org.junit.Test(expected = IllegalStateException.class)
-	public void optionalTestStudentDoesNotExist() {
-		data.registerLabEvaluation(70, 20, 1);
-	}
-	
-	@org.junit.Test(expected = IllegalStateException.class)
-	public void optionalTestStudentShouldNotExist() {
-		data.createStudent(10, "Pippo");
-	}
-	
-	@org.junit.Test(expected = IllegalStateException.class)
-	public void optionalTestCantRegisterProjectsTwice() {
-		data.registerProjectEvaluation(40, 10, "Arkanoid");
-	}
-	
-	@org.junit.Test(expected = IllegalStateException.class)
-	public void testCantRegisterSameLabTwice() {
-		data.registerLabEvaluation(60, 18, 3);
-	}
+    
+    @org.junit.Test
+    public void testTime() {
+        // Test del funzionamento base, in particolare, di getSecondsFromMidnight
+        final Time time = new TimeImpl(20,30,0); // 20:30:00, 8 e mezza di sera
+        assertEquals(time.getHours(),20);
+        assertEquals(time.getMinutes(),30);
+        assertEquals(time.getSeconds(),0);
+        assertEquals(time.getSecondsFromMidnight(),73800);
+        final Time time2 = new TimeImpl(1,1,1); // l'una e un minuti e un secondo, di notte
+        assertEquals(time2.getHours(),1); // un'ora.. 3600 secondi
+        assertEquals(time2.getMinutes(),1); // un minuto.. 60 secondi
+        assertEquals(time2.getSeconds(),1);
+        assertEquals(time2.getSecondsFromMidnight(),3600+60+1);
+    }
+    
+    @org.junit.Test
+    public void testLabel() {
+        final Time time = new TimeImpl(20,30,0); // 20:30:00, 8 e mezza di sera
+        assertEquals(time.getLabel24(),"20:30:00");
+        final Time time2 = new TimeImpl(1,1,1); // l'una e un minuto e un secondo, di notte
+        assertEquals(time2.getLabel24(),"01:01:01");
+    }
+    
+    @org.junit.Test
+    public void testClock() {
+        // Verifica del funzionamento del tick del clock
+        final Time time = new TimeImpl(20,30,0); // 20:30:00, 8 e mezza di sera
+        final Clock clock = new ClockImpl(time);
+        assertEquals(clock.getTime(),time); // va implementata TimeImpl.equals!!
+        clock.tick();
+        assertEquals(clock.getTime(),new TimeImpl(20,30,1)); 
+        for (int i=0;i<59;i++){ // passano 59 secondi
+            clock.tick();
+        }
+        assertEquals(clock.getTime(),new TimeImpl(20,31,0)); 
+        for (int i=0;i<60;i++){ // passa un minuto
+            clock.tick();
+        }
+        assertEquals(clock.getTime(),new TimeImpl(20,32,0)); 
+        for (int i=0;i<8*60;i++){ // passano 8 minuti
+            clock.tick();
+        }
+        assertEquals(clock.getTime(),new TimeImpl(20,40,0)); 
+        for (int i=0;i<20*60+1;i++){ // passano 20 minuti e un secondo
+            clock.tick();
+        }
+        assertEquals(clock.getTime(),new TimeImpl(21,0,1)); 
+        for (int i=0;i<60*60;i++){ // passa un'ora
+            clock.tick();
+        }
+        assertEquals(clock.getTime(),new TimeImpl(22,0,1)); 
+        for (int i=0;i<2*60*60;i++){ // passano due ore
+            clock.tick();
+        }
+        assertEquals(clock.getTime(),new TimeImpl(0,0,1)); 
+    }
+    
+    @org.junit.Test
+    public void testTimeException() {
+        // verifica dei limiti di ore (0-23), minuti (0-59) e secondi (0-59)
+        try{
+            new TimeImpl(25,30,0);
+            fail("no 25 hours");
+        } catch (IllegalArgumentException e){
+        } catch (Exception e){
+            fail("wrong exception thrown");
+        }
+        try{
+            new TimeImpl(-1,30,0);
+            fail("no -1 hours");
+        } catch (IllegalArgumentException e){
+        } catch (Exception e){
+            fail("wrong exception thrown");
+        }
+        try{
+            new TimeImpl(20,60,0);
+            fail("no 60 minutes");
+        } catch (IllegalArgumentException e){
+        } catch (Exception e){
+            fail("wrong exception thrown");
+        }
+        try{
+            new TimeImpl(20,30,60);
+            fail("no 60 seconds");
+        } catch (IllegalArgumentException e){
+        } catch (Exception e){
+            fail("wrong exception thrown");
+        }
+    }
+    
+    
+    @org.junit.Test
+    public void optionalTestNotifications() {
+        // Funzionamento delle notifiche
+        final Set<String> alarms = new HashSet<>();
+        final Time time = new TimeImpl(20,30,0); // 20:30:00, 8 e mezza di sera
+        final Clock clock = new ClockImpl(time);
+        // gli observer qui sono lambda che inseriscono stringhe in alarms
+        clock.registerAlarmObserver(new TimeImpl(20,30,5), ()-> alarms.add("a") ); // "a", at 20:30:05
+        clock.registerSecondsDeadlineObserver(5, ()-> alarms.add("b") ); // "b", at 20:30:05.. ossia fra 5 secondi
+        clock.registerMinutesDeadlineObserver(1, ()-> alarms.add("c") ); // "c", at 20:31:00.. ossia fra 1 minuto
+        clock.registerHoursDeadlineObserver(1, ()-> alarms.add("d")); // "d", at 21:31:00.. ossia fra 1 ora
+        clock.tick(); // 20:30:01
+        clock.tick(); // 20:30:02
+        clock.tick();
+        clock.tick();
+        assertEquals(alarms.size(),0); // fin qui nessu allarme
+        clock.tick(); // 20:30:05
+        assertEquals(alarms,new HashSet<>(Arrays.asList("a","b"))); // allarme a e b scattati
+        for (int i=0;i<60;i++){
+            clock.tick(); // going to 20:31:05 
+        }
+        assertEquals(alarms,new HashSet<>(Arrays.asList("a","b","c"))); // anche c scatta
+        for (int i=0;i<60*60;i++){
+            clock.tick(); // going to 21:31:05 
+        }
+        assertEquals(alarms,new HashSet<>(Arrays.asList("a","b","c","d"))); // anche d scatta
+    }
 }

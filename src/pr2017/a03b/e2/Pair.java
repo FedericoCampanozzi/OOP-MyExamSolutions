@@ -1,4 +1,4 @@
-package pr2016.a03b.e2;
+package pr2017.a03b.e2;
 
 /*
  * A standard generic Pair<X,Y>, with getters, hashCode, equals, and toString well implemented. 

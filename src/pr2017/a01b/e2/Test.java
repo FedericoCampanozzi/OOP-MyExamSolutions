@@ -1,3 +1,4 @@
+//Finito in 20 min
 package pr2017.a01b.e2;
 
 public class Test {
