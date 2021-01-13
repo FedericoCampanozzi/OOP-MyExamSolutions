@@ -1,4 +1,4 @@
-//Finito in 50 min
+//Finito in 50 min + Opzionali + Confronto con soluzione
 package pr2018.a05.e1;
 
 import static org.junit.Assert.*;
