@@ -1,3 +1,4 @@
+//Finito in 80 min
 package pr2017.a01b.e1;
 
 import static org.junit.Assert.*;
